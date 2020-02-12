@@ -13,12 +13,12 @@ const (
 	baseURL = "https://api.telegram.org/bot"
 )
 
-func sendToTelegramBot(telebot *Telebot, message string) error {
+func sendToTelegramBot(bot *Bot, message string) error {
 
-	rawURL := fmt.Sprintf("%s%s/sendMessage", baseURL, telebot.accessToken)
+	rawURL := fmt.Sprintf("%s%s/sendMessage", baseURL, bot.accessToken)
 	url, _ := url.Parse(rawURL)
 	q := url.Query()
-	q.Set("chat_id", telebot.chatID)
+	q.Set("chat_id", bot.chatID)
 	q.Set("text", message)
 	url.RawQuery = q.Encode()
 

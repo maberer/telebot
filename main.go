@@ -14,8 +14,8 @@ const (
 //ErrCongested means, that the buffer has no free space
 var ErrCongested = errors.New("buffer congested")
 
-// Telebot is the config object
-type Telebot struct {
+//Bot is the config object
+type Bot struct {
 	accessToken string
 	chatID      string
 	msgBuf      chan string
@@ -25,9 +25,9 @@ type Telebot struct {
 }
 
 //New creates a new telebot instance
-func New(accessToken, chatID string, backlogSize int) *Telebot {
+func New(accessToken, chatID string, backlogSize int) *Bot {
 
-	telebot := &Telebot{
+	bot := &Bot{
 		accessToken: accessToken,
 		chatID:      chatID,
 		msgBuf:      make(chan string, backlogSize),
@@ -39,26 +39,26 @@ func New(accessToken, chatID string, backlogSize int) *Telebot {
 		},
 	}
 
-	go worker(telebot)
-	return telebot
+	go worker(bot)
+	return bot
 }
 
 //SetErrHandler sets a custom error handler
-func (tb *Telebot) SetErrHandler(f func(error)) {
-	tb.ErrHandler = f
+func (bot *Bot) SetErrHandler(f func(error)) {
+	bot.ErrHandler = f
 }
 
 //Bye frees ressources
-func (tb *Telebot) Bye() {
-	close(tb.msgBuf)
+func (bot *Bot) Bye() {
+	close(bot.msgBuf)
 }
 
 //Send sends a message to the configured bot
-func (tb *Telebot) Send(message string) error {
+func (bot *Bot) Send(message string) error {
 
 	// perform a non blocking channel write
 	select {
-	case tb.msgBuf <- message:
+	case bot.msgBuf <- message:
 		return nil
 	default:
 		// discard message
@@ -66,14 +66,14 @@ func (tb *Telebot) Send(message string) error {
 	}
 }
 
-func worker(tb *Telebot) {
+func worker(bot *Bot) {
 
-	for message := range tb.msgBuf {
-		sendMessage(tb, message)
+	for message := range bot.msgBuf {
+		sendMessage(bot, message)
 	}
 }
 
-func sendMessage(tb *Telebot, message string) {
+func sendMessage(tb *Bot, message string) {
 
 	if tb.LocalEcho {
 		oneSecond := float64(time.Second)
