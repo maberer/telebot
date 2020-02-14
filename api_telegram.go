@@ -23,10 +23,7 @@ func sendToTelegramBot(bot *Bot, message string) error {
 	url.RawQuery = q.Encode()
 
 	client := http.Client{Timeout: 5 * time.Second}
-
-	ddd := url.String()
-	fmt.Println(ddd)
-	req, err := http.NewRequest("GET", ddd, nil)
+	req, err := http.NewRequest("GET", url.String(), nil)
 
 	if err != nil {
 		return err
