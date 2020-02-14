@@ -35,7 +35,7 @@ func New(accessToken, chatID string, backlogSize int) *Bot {
 		LocalEcho:   false,
 		ErrHandler: func(e error) {
 			// default error handler
-			fmt.Println(fmt.Sprintf("%s\n", e.Error()))
+			fmt.Printf("Telebot error: %s\n", e.Error())
 		},
 	}
 
