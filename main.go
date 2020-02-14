@@ -81,7 +81,7 @@ func sendMessage(tb *Bot, message string) {
 		// (never causing timeout errors)
 		secs := oneSecond * 1.5 * rand.Float64()
 		time.Sleep(time.Duration(secs))
-		fmt.Printf("telebot: %s\n", message)
+		fmt.Printf("Telebot says: %s\n", message)
 		return
 	}
 
